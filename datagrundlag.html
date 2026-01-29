@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Datagrundlag – Brudøkonomi</title>
+  <style>
+    :root{--bg:#f6f7f8;--card:#fff;--text:#111;--muted:#60646c;--border:#e7e7e7;--shadow:0 12px 34px rgba(0,0,0,.08);--shadow2:0 8px 24px rgba(0,0,0,.06);--radius:16px}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:1080px;margin:0 auto;padding:26px 18px 44px}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+    .brand{display:flex;gap:10px;align-items:center}
+    .dot{width:10px;height:10px;border-radius:999px;background:#111;opacity:.85}
+    .brand a{color:#111;text-decoration:none;font-weight:750;letter-spacing:.2px}
+    .links{display:flex;gap:12px;flex-wrap:wrap}
+    .links a{color:var(--muted);text-decoration:none;font-weight:600}
+    .links a:hover{color:#111}
+    .hero{background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.7));border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow2);padding:22px}
+    h1{margin:0 0 10px;font-size:2rem;line-height:1.15}
+    p{margin:0 0 12px;color:#444;line-height:1.65}
+    .muted{color:var(--muted)}
+    .card{margin-top:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+    .card h2{margin:0 0 10px;font-size:1.15rem}
+    .card h3{margin:14px 0 8px;font-size:1.02rem}
+    .note{background:#fafafa;border:1px solid #eee;border-radius:12px;padding:12px;margin-top:10px;color:#333}
+    .footer{margin-top:18px;color:var(--muted);font-size:.92rem}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="nav">
+      <div class="brand">
+        <div class="dot"></div>
+        <a href="/">Brudøkonomi</a>
+      </div>
+      <div class="links">
+        <a href="/om.html">Om</a>
+        <a href="/datagrundlag.html">Datagrundlag</a>
+        <a href="/privatliv.html">Privatliv</a>
+        <a href="/">Beregner</a>
+      </div>
+    </div>
+
+    <div class="hero">
+      <h1>Datagrundlag og beregningsprincipper</h1>
+      <p class="muted">
+        Her kan du se, hvilke data der bruges, og hvordan beregningerne er skruet sammen. Formålet er gennemsigtighed:
+        du skal kunne forstå, hvad værktøjet gør – og hvad det ikke gør.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Hvilke data bruger værktøjet?</h2>
+      <p>
+        Værktøjet bruger de tal, som du selv indtaster i beregneren. Der hentes ikke automatisk data fra offentlige registre i den nuværende version.
+      </p>
+
+      <h3>Grundformler (forenklet)</h3>
+      <p>
+        Samlet friværdi beregnes som boligens værdi minus restgæld.
+        Din andel beregnes som samlet friværdi ganget med din ejerandel.
+        Ved overtagelse estimeres en udbetaling til partner som den del af friværdien, som ikke tilhører dig.
+      </p>
+
+      <div class="note">
+        Bemærk: Det er en forenkling. Reelle forløb kan afhænge af lån, aftaler, tinglysning, indfrielsesomkostninger, skat, m.v.
+      </div>
+
+      <h3>Hvad vi ikke medregner (endnu)</h3>
+      <p>
+        I den nuværende version medregner vi ikke automatisk mægleromkostninger, indfrielsesomkostninger, tinglysningsafgifter,
+        variable renter, bidragssatser, eller detaljerede budgetkrav fra banker.
+      </p>
+      <p class="muted">
+        Det er oplagte næste trin i udviklingen, og vi kan udvide modellen gradvist uden at gøre værktøjet tungt at bruge.
+      </p>
+
+      <h3>Hvorfor denne tilgang?</h3>
+      <p>
+        Ved brud er det vigtigste ofte at få et første, forståeligt overblik, så man kan stille de rigtige spørgsmål.
+        Værktøjet er bygget til at være hurtigt og enkelt, og rapporten er tænkt som en “samtalestarter”.
+      </p>
+    </div>
+
+    <div class="footer">
+      <a href="/privatliv.html" style="color:inherit;">Læs om privatliv og data</a>
+    </div>
+
+  </div>
+</body>
+</html>
