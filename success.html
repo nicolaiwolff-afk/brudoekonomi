@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Brudøkonomi – Rapport</title>
+  <style>
+    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f6f7f8;margin:0;color:#111}
+    .wrap{max-width:900px;margin:0 auto;padding:38px 18px}
+    .card{background:#fff;border:1px solid #e7e7e7;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.06);padding:18px}
+    h1{margin:0 0 10px;font-size:1.8rem}
+    p{margin:0 0 10px;color:#444;line-height:1.5}
+    .btn{display:inline-block;background:#111;color:#fff;border:0;border-radius:10px;padding:12px 14px;font-size:1rem;cursor:pointer;text-decoration:none}
+    .muted{color:#666}
+    .hidden{display:none}
+    .report{margin-top:14px;border-top:1px solid #eee;padding-top:14px}
+    .kpi{padding:10px 0;border-bottom:1px solid #f0f0f0}
+    .kpi b{display:inline-block;min-width:240px}
+    @media print{
+      .no-print{display:none}
+      body{background:#fff}
+      .card{box-shadow:none;border:0}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Din rapport</h1>
+      <p id="status" class="muted">Kontrollerer betaling …</p>
+
+      <div id="paid" class="hidden">
+        <p>Betaling bekræftet. Du kan nu downloade rapporten som PDF.</p>
+        <button class="btn no-print" id="pdfBtn">Download PDF</button>
+
+        <div class="report" id="report">
+          <h2 style="margin:14px 0 8px;">Brudøkonomi – Fuld rapport</h2>
+          <p class="muted">Genereret: <span id="ts"></span></p>
+
+          <div class="kpi"><b>Boligens værdi</b> <span id="r_home">—</span></div>
+          <div class="kpi"><b>Restgæld</b> <span id="r_mort">—</span></div>
+          <div class="kpi"><b>Din ejerandel</b> <span id="r_share">—</span></div>
+          <div class="kpi"><b>Din månedlige indkomst</b> <span id="r_inc">—</span></div>
+          <div class="kpi"><b>Din øvrige gæld</b> <span id="r_debt">—</span></div>
+
+          <div class="kpi"><b>Samlet friværdi</b> <span id="r_equity">—</span></div>
+          <div class="kpi"><b>Dit estimerede salgsudbytte</b> <span id="r_sale">—</span></div>
+          <div class="kpi"><b>Beløb til partner ved overtagelse</b> <span id="r_payout">—</span></div>
+          <div class="kpi"><b>Samlet gæld efter overtagelse</b> <span id="r_total">—</span></div>
+
+          <p class="muted" style="margin-top:12px;">
+            Bemærk: Rapporten er et økonomisk overblik baseret på dine indtastninger og en forsimplet kredit-test. Brug den som beslutningsstøtte.
+          </p>
+        </div>
+      </div>
+
+      <div id="notpaid" class="hidden">
+        <p>Jeg kan ikke bekræfte en gennemført betaling på dette link endnu.</p>
+        <p class="muted">Hvis du netop har betalt, så vent 1–2 minutter og genindlæs siden.</p>
+        <p><a class="btn" href="/">Tilbage til beregner</a></p>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function dkk(n){
+    const rounded = Math.round(Number(n || 0));
+    return new Intl.NumberFormat("da-DK").format(rounded) + " kr.";
+  }
+  function getQS(name){
+    const u = new URL(window.location.href);
+    return u.searchParams.get(name);
+  }
+  function loadInputs(){
+    try{
+      return JSON.parse(localStorage.getItem("bro_inputs") || "{}");
+    }catch(e){
+      return {};
+    }
+  }
+  function fillReport(data){
+    const home = Number(data.homeValue || 0);
+    const mort = Number(data.mortgage || 0);
+    const share = Number(data.share || 0.5);
+    const inc = Number(data.myIncome || 0);
+    const myDebt = Number(data.myDebt || 0);
+
+    const equity = Math.max(0, home - mort);
+    const myEquity = equity * share;
+    const payout = equity * (1 - share);
+    const total = mort + payout + myDebt;
+
+    document.getElementById("ts").textContent = new Date().toLocaleString("da-DK");
+    document.getElementById("r_home").textContent = dkk(home);
+    document.getElementById("r_mort").textContent = dkk(mort);
+    document.getElementById("r_share").textContent = Math.round(share*100) + " %";
+    document.getElementById("r_inc").textContent = dkk(inc);
+    document.getElementById("r_debt").textContent = dkk(myDebt);
+
+    document.getElementById("r_equity").textContent = dkk(equity);
+    document.getElementById("r_sale").textContent = dkk(myEquity);
+    document.getElementById("r_payout").textContent = dkk(payout);
+    document.getElementById("r_total").textContent = dkk(total);
+
+    document.getElementById("pdfBtn").addEventListener("click", () => window.print());
+  }
+
+  async function main(){
+    const sid = getQS("session_id");
+    const status = document.getElementById("status");
+
+    if(!sid){
+      status.textContent = "Mangler session_id i URL.";
+      document.getElementById("notpaid").classList.remove("hidden");
+      return;
+    }
+
+    const r = await fetch(`/api/session-status?session_id=${encodeURIComponent(sid)}`);
+    const j = await r.json();
+
+    if(j.ok && j.paid){
+      status.textContent = "Betaling bekræftet.";
+      document.getElementById("paid").classList.remove("hidden");
+      fillReport(loadInputs());
+    } else {
+      status.textContent = "Betaling ikke bekræftet endnu.";
+      document.getElementById("notpaid").classList.remove("hidden");
+    }
+  }
+  main();
+</script>
+</body>
+</html>
