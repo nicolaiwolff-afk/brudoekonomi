@@ -1,12 +1,9 @@
 {
-  "routes": [
-    { "src": "/success.html", "dest": "/success.html" },
-    { "src": "/success", "dest": "/success.html" },
-    { "src": "/(.*)", "dest": "/index.html" }
+  "rewrites": [
+    { "source": "/success", "destination": "/success.html" },
+    { "source": "/success/", "destination": "/success.html" }
   ],
   "functions": {
-    "api/*.js": {
-      "runtime": "nodejs18.x"
-    }
+    "api/*.js": { "runtime": "nodejs18.x" }
   }
 }
