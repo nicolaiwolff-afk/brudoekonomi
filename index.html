@@ -2,213 +2,103 @@
 <html lang="da">
 <head>
 <meta charset="UTF-8">
-<title>Brudøkonomi – Overblik over økonomi ved brud</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Få et økonomisk overblik ved brud: friværdi, salgsudbytte og om du kan overtage boligen. Gratis beregner." />
+<title>Brudøkonomi</title>
+
 <style>
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  margin: 0;
-  background: #f6f7f8;
-  color: #111;
-}
-header {
-  background: white;
-  border-bottom: 1px solid #e5e5e5;
-  padding: 20px 30px;
-}
-.logo {
-  font-weight: 700;
-  font-size: 1.4rem;
-}
-.container {
-  max-width: 1000px;
-  margin: auto;
-  padding: 40px 20px;
-}
-.hero {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-}
-@media(max-width: 800px){
-  .hero{grid-template-columns:1fr;}
-}
-.hero h1 {
-  font-size: 2.6rem;
-  line-height: 1.2;
-}
-.hero p {
-  font-size: 1.1rem;
-  color: #444;
-}
-.card {
-  background: white;
-  padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-  margin-bottom: 25px;
-}
-label {
-  font-size: 0.9rem;
-  color: #666;
-  display: block;
-  margin-bottom: 4px;
-}
-input, select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  margin-bottom: 12px;
-  font-size: 1rem;
-}
-button {
-  background: #111;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  padding: 14px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-button.secondary {
-  background: #eee;
-  color: #111;
-}
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.kpi {
-  border: 1px solid #eee;
-  border-radius: 12px;
-  padding: 16px;
-}
-.kpi span {
-  display: block;
-  color: #777;
-  font-size: 0.9rem;
-}
-.kpi strong {
-  font-size: 1.4rem;
-}
-.cta {
-  background: #111;
-  color: white;
-  padding: 20px;
-  border-radius: 14px;
-  text-align: center;
-  margin-top: 20px;
-}
-.cta button {
-  background: white;
-  color: #111;
-  margin-top: 10px;
-}
+body{font-family:system-ui;background:#f6f7f8;margin:0}
+.wrap{max-width:700px;margin:auto;padding:40px 20px}
+.card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+h1{margin-top:0}
+label{display:block;margin-top:14px;font-weight:600}
+input{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-top:6px}
+button{margin-top:20px;padding:14px;border-radius:10px;border:0;background:#111;color:#fff;font-size:16px;width:100%}
+.kpi{margin-top:10px}
 </style>
 </head>
 
 <body>
-<header>
-  <div class="logo">Brudøkonomi</div>
-</header>
-
-<div class="container">
-
-<section class="hero">
-<div>
-<h1>Hvad sker der med din økonomi, hvis I går fra hinanden?</h1>
-<p>Få overblik over bolig, gæld og penge på 2 minutter. Brudøkonomi viser dig, hvad du får, og om du realistisk kan overtage boligen.</p>
-</div>
-
+<div class="wrap">
 <div class="card">
-<h3>Beregner</h3>
+<h1>Brudøkonomi</h1>
+
 <label>Boligens værdi</label>
-<input id="home" value="3500000">
+<input id="home" type="number">
+
 <label>Restgæld</label>
-<input id="debt" value="2100000">
-<label>Din ejerandel</label>
-<select id="share">
-<option value="0.5">50 %</option>
-<option value="0.6">60 %</option>
-<option value="0.4">40 %</option>
-</select>
+<input id="mortgage" type="number">
+
+<label>Din ejerandel (%)</label>
+<input id="share" type="number">
+
 <label>Din månedlige indkomst</label>
-<input id="income" value="45000">
+<input id="income" type="number">
+
 <label>Din øvrige gæld</label>
-<input id="mydebt" value="150000">
+<input id="debt" type="number">
 
-<button onclick="calc()">Beregn</button>
+<button id="calc">Beregn</button>
+
+<div id="preview"></div>
+
+<button id="buy" style="display:none">Få fuld rapport (49 kr)</button>
 </div>
-</section>
-
-<section class="card">
-<h3>Resultat</h3>
-<div class="grid">
-<div class="kpi"><span>Samlet friværdi</span><strong id="equity">–</strong></div>
-<div class="kpi"><span>Dit salgsudbytte</span><strong id="mine">–</strong></div>
-<div class="kpi"><span>Beløb til partner ved overtagelse</span><strong id="payout">–</strong></div>
-<div class="kpi"><span>Samlet gæld efter overtagelse</span><strong id="totaldebt">–</strong></div>
-</div>
-
-<div class="cta">
-  <h3>Vil du vide om du kan blive boende?</h3>
-  <p>Få fuld rapport med boligtest, rådighedsbeløb og scenarier.</p>
-  <a href="https://buy.stripe.com/test_8x200beGV7Zv4PFaPJfQI00" target="_blank" rel="noopener noreferrer">
-    <button onclick="goToCheckout()">Få fuld rapport – 99 kr.</button>
-  </a>
-</div>
-</section>
-
 </div>
 
 <script>
-function dkk(n){
-  return Math.round(n).toLocaleString("da-DK") + " kr.";
+function fmt(n){
+ return new Intl.NumberFormat("da-DK",{style:"currency",currency:"DKK",maximumFractionDigits:0}).format(n)
 }
-function calc(){
-  let home = Number(homeInput.value);
-  let debt = Number(debtInput.value);
-  let share = Number(shareInput.value);
-  let income = Number(incomeInput.value);
-  let mydebt = Number(mydebtInput.value);
 
-  let equity = home - debt;
-  let mine = equity * share;
-  let payout = equity * (1-share);
-  let total = debt + payout + mydebt;
+let report = null;
 
-  document.getElementById("equity").innerText = dkk(equity);
-  document.getElementById("mine").innerText = dkk(mine);
-  document.getElementById("payout").innerText = dkk(payout);
-  document.getElementById("totaldebt").innerText = dkk(total);
-}
+document.getElementById("calc").onclick = () => {
+ const home = Number(homeInput.value);
+ const mortgage = Number(mortgageInput.value);
+ const share = Number(shareInput.value)/100;
+ const income = Number(incomeInput.value);
+ const debt = Number(debtInput.value);
+
+ const equity = home - mortgage;
+ const yourEquity = equity * share;
+ const payout = equity * (1-share);
+ const totalDebt = mortgage + payout + debt;
+
+ report = {
+   ts: new Date().toISOString(),
+   homeValue: home,
+   mortgage: mortgage,
+   sharePct: share*100,
+   incomeMonthly: income,
+   otherDebt: debt,
+   equity: equity,
+   saleProceeds: yourEquity,
+   payoutToPartner: payout,
+   totalDebtAfterTakeover: totalDebt
+ };
+
+ localStorage.setItem("brudoekonomi:last_report", JSON.stringify(report));
+
+ preview.innerHTML = `
+ <p class="kpi">Din friværdi: <b>${fmt(yourEquity)}</b></p>
+ <p class="kpi">Udbetaling til partner: <b>${fmt(payout)}</b></p>
+ <p class="kpi">Gæld efter overtagelse: <b>${fmt(totalDebt)}</b></p>
+ `;
+
+ buy.style.display = "block";
+};
 
 const homeInput = document.getElementById("home");
-const debtInput = document.getElementById("debt");
+const mortgageInput = document.getElementById("mortgage");
 const shareInput = document.getElementById("share");
 const incomeInput = document.getElementById("income");
-const mydebtInput = document.getElementById("mydebt");
+const debtInput = document.getElementById("debt");
 
-calc();
-  const STRIPE_LINK = "https://buy.stripe.com/test_8x200beGV7Zv4PFaPJfQI00";
-
-function goToCheckout(){
-  const payload = {
-    homeValue: Number(document.getElementById("home").value || 0),
-    mortgage: Number(document.getElementById("debt").value || 0),
-    share: Number(document.getElementById("share").value || 0.5),
-    myIncome: Number(document.getElementById("income").value || 0),
-    myDebt: Number(document.getElementById("mydebt").value || 0)
-  };
-
-  localStorage.setItem("bro_inputs", JSON.stringify(payload));
-  window.location.href = STRIPE_LINK;
-}
-
+document.getElementById("buy").onclick = async () => {
+ const res = await fetch("/api/create-checkout");
+ const data = await res.json();
+ window.location = data.url;
+};
 </script>
-
 </body>
 </html>
