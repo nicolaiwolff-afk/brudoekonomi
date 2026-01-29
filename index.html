@@ -1,241 +1,197 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-  <meta charset="UTF-8" />
-  <title>Brudøkonomi – beregner</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Beregner: Få et hurtigt overblik over økonomien ved brud – friværdi, salgsudbytte og mulig overtagelse." />
-  <style>
-    :root { --bg:#f7f7f7; --card:#fff; --txt:#222; --muted:#666; --border:#e6e6e6; }
-    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background:var(--bg); margin:0; color:var(--txt); }
-    .wrap { max-width: 980px; margin: 0 auto; padding: 42px 18px 70px; }
-    header { text-align:center; margin-bottom: 26px; }
-    h1 { font-size: 2.1rem; margin: 0 0 10px; }
-    .lead { color:var(--muted); margin:0; font-size: 1.05rem; line-height:1.5; }
-    .grid { display:grid; grid-template-columns: 1fr; gap:16px; }
-    @media (min-width: 900px) { .grid { grid-template-columns: 1.05fr 0.95fr; } }
-    .card { background:var(--card); border:1px solid var(--border); border-radius:14px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding:18px; }
-    .card h2 { margin: 0 0 12px; font-size: 1.25rem; }
-    .row { display:grid; grid-template-columns: 1fr; gap:10px; margin-bottom: 12px; }
-    @media (min-width: 520px) { .row { grid-template-columns: 1fr 1fr; } }
-    label { display:block; font-size: 0.95rem; margin-bottom: 6px; color: var(--muted); }
-    input, select {
-      width:100%; box-sizing:border-box; padding:12px 12px; border:1px solid var(--border);
-      border-radius:10px; font-size:1rem; background:#fff;
-    }
-    .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px; }
-    button {
-      border:0; border-radius:10px; padding:12px 14px; font-size:1rem; cursor:pointer;
-      background:#111; color:#fff;
-    }
-    button.secondary { background:#fff; color:#111; border:1px solid var(--border); }
-    .note { color:var(--muted); font-size: 0.95rem; line-height:1.5; margin-top: 10px; }
-    .out { display:grid; gap:10px; }
-    .kpi { border:1px solid var(--border); border-radius:12px; padding:12px; background:#fff; }
-    .kpi .t { color:var(--muted); font-size:0.95rem; margin-bottom:6px; }
-    .kpi .v { font-size:1.35rem; font-weight:650; }
-    .pill { display:inline-block; padding:6px 10px; border-radius:999px; font-size:0.92rem; border:1px solid var(--border); background:#fff; }
-    .ok { border-color:#b7e3c7; background:#f2fff6; }
-    .maybe { border-color:#ffe2a8; background:#fffaf0; }
-    .no { border-color:#ffc1c1; background:#fff4f4; }
-    .small { font-size:0.92rem; color:var(--muted); line-height:1.45; }
-    .footer { margin-top: 18px; padding-top: 14px; border-top:1px solid var(--border); color:var(--muted); font-size:0.92rem; line-height:1.45; }
-  </style>
+<meta charset="UTF-8">
+<title>Brudøkonomi – Overblik over økonomi ved brud</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Få et økonomisk overblik ved brud: friværdi, salgsudbytte og om du kan overtage boligen. Gratis beregner." />
+<style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  margin: 0;
+  background: #f6f7f8;
+  color: #111;
+}
+header {
+  background: white;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 20px 30px;
+}
+.logo {
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 40px 20px;
+}
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+@media(max-width: 800px){
+  .hero{grid-template-columns:1fr;}
+}
+.hero h1 {
+  font-size: 2.6rem;
+  line-height: 1.2;
+}
+.hero p {
+  font-size: 1.1rem;
+  color: #444;
+}
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  margin-bottom: 25px;
+}
+label {
+  font-size: 0.9rem;
+  color: #666;
+  display: block;
+  margin-bottom: 4px;
+}
+input, select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+button {
+  background: #111;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+button.secondary {
+  background: #eee;
+  color: #111;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.kpi {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 16px;
+}
+.kpi span {
+  display: block;
+  color: #777;
+  font-size: 0.9rem;
+}
+.kpi strong {
+  font-size: 1.4rem;
+}
+.cta {
+  background: #111;
+  color: white;
+  padding: 20px;
+  border-radius: 14px;
+  text-align: center;
+  margin-top: 20px;
+}
+.cta button {
+  background: white;
+  color: #111;
+  margin-top: 10px;
+}
+</style>
 </head>
 
 <body>
-  <div class="wrap">
-    <header>
-      <h1>Brudøkonomi</h1>
-      <p class="lead">Få et hurtigt økonomisk overblik ved brud: friværdi, salgsudbytte og en simpel vurdering af, om du kan overtage boligen.</p>
-    </header>
+<header>
+  <div class="logo">Brudøkonomi</div>
+</header>
 
-    <div class="grid">
-      <section class="card">
-        <h2>Indtast tal</h2>
+<div class="container">
 
-        <div class="row">
-          <div>
-            <label for="homeValue">Boligens værdi (kr.)</label>
-            <input id="homeValue" inputmode="numeric" value="3500000" />
-          </div>
-          <div>
-            <label for="mortgage">Restgæld i boligen (kr.)</label>
-            <input id="mortgage" inputmode="numeric" value="2100000" />
-          </div>
-        </div>
+<section class="hero">
+<div>
+<h1>Hvad sker der med din økonomi, hvis I går fra hinanden?</h1>
+<p>Få overblik over bolig, gæld og penge på 2 minutter. Brudøkonomi viser dig, hvad du får, og om du realistisk kan overtage boligen.</p>
+</div>
 
-        <div class="row">
-          <div>
-            <label for="share">Din ejerandel</label>
-            <select id="share">
-              <option value="0.50" selected>50 %</option>
-              <option value="0.60">60 %</option>
-              <option value="0.40">40 %</option>
-              <option value="0.70">70 %</option>
-              <option value="0.30">30 %</option>
-            </select>
-          </div>
-          <div>
-            <label for="wantStay">Ønsker du at blive boende?</label>
-            <select id="wantStay">
-              <option value="yes" selected>Ja</option>
-              <option value="no">Nej / ligegyldigt</option>
-            </select>
-          </div>
-        </div>
+<div class="card">
+<h3>Beregner</h3>
+<label>Boligens værdi</label>
+<input id="home" value="3500000">
+<label>Restgæld</label>
+<input id="debt" value="2100000">
+<label>Din ejerandel</label>
+<select id="share">
+<option value="0.5">50 %</option>
+<option value="0.6">60 %</option>
+<option value="0.4">40 %</option>
+</select>
+<label>Din månedlige indkomst</label>
+<input id="income" value="45000">
+<label>Din øvrige gæld</label>
+<input id="mydebt" value="150000">
 
-        <div class="row">
-          <div>
-            <label for="myIncome">Din månedlige bruttoindkomst (kr.)</label>
-            <input id="myIncome" inputmode="numeric" value="45000" />
-          </div>
-          <div>
-            <label for="theirIncome">Partners månedlige bruttoindkomst (kr.)</label>
-            <input id="theirIncome" inputmode="numeric" value="32000" />
-          </div>
-        </div>
+<button onclick="calc()">Beregn</button>
+</div>
+</section>
 
-        <div class="row">
-          <div>
-            <label for="myDebt">Din øvrige gæld (kr.)</label>
-            <input id="myDebt" inputmode="numeric" value="150000" />
-          </div>
-          <div>
-            <label for="theirDebt">Partners øvrige gæld (kr.)</label>
-            <input id="theirDebt" inputmode="numeric" value="50000" />
-          </div>
-        </div>
+<section class="card">
+<h3>Resultat</h3>
+<div class="grid">
+<div class="kpi"><span>Samlet friværdi</span><strong id="equity">–</strong></div>
+<div class="kpi"><span>Dit salgsudbytte</span><strong id="mine">–</strong></div>
+<div class="kpi"><span>Beløb til partner ved overtagelse</span><strong id="payout">–</strong></div>
+<div class="kpi"><span>Samlet gæld efter overtagelse</span><strong id="totaldebt">–</strong></div>
+</div>
 
-        <div class="actions">
-          <button id="calcBtn">Beregn</button>
-          <button class="secondary" id="resetBtn" type="button">Nulstil</button>
-        </div>
+<div class="cta">
+<h3>Vil du vide om du kan blive boende?</h3>
+<p>Få fuld rapport med boligtest, rådighedsbeløb og scenarier.</p>
+<button>Få fuld rapport (kommer)</button>
+</div>
+</section>
 
-        <p class="note">
-          Version 1 bruger en forsimplet “bank-test”: maksimum samlet gæld svarende til ca. <strong>4× din årsindkomst</strong>.
-          Det er et groft pejlemærke, der kun skal bruges som første overblik.
-        </p>
-      </section>
+</div>
 
-      <section class="card">
-        <h2>Resultat</h2>
-        <div class="out" id="out">
-          <div class="kpi">
-            <div class="t">Samlet friværdi</div>
-            <div class="v" id="equity">—</div>
-            <div class="small">Boligens værdi minus restgæld.</div>
-          </div>
+<script>
+function dkk(n){
+  return Math.round(n).toLocaleString("da-DK") + " kr.";
+}
+function calc(){
+  let home = Number(homeInput.value);
+  let debt = Number(debtInput.value);
+  let share = Number(shareInput.value);
+  let income = Number(incomeInput.value);
+  let mydebt = Number(mydebtInput.value);
 
-          <div class="kpi">
-            <div class="t">Dit estimerede salgsudbytte</div>
-            <div class="v" id="mySale">—</div>
-            <div class="small">Din ejerandel af friværdien (forenklet).</div>
-          </div>
+  let equity = home - debt;
+  let mine = equity * share;
+  let payout = equity * (1-share);
+  let total = debt + payout + mydebt;
 
-          <div class="kpi">
-            <div class="t">Beløb til partner ved overtagelse</div>
-            <div class="v" id="payOther">—</div>
-            <div class="small">Det, du typisk skal finansiere som udbetaling til partneren (forenklet).</div>
-          </div>
+  document.getElementById("equity").innerText = dkk(equity);
+  document.getElementById("mine").innerText = dkk(mine);
+  document.getElementById("payout").innerText = dkk(payout);
+  document.getElementById("totaldebt").innerText = dkk(total);
+}
 
-          <div class="kpi">
-            <div class="t">Kan du overtage? (simpel test)</div>
-            <div class="v"><span class="pill" id="canStayPill">—</span></div>
-            <div class="small" id="canStayTxt">—</div>
-          </div>
+const homeInput = document.getElementById("home");
+const debtInput = document.getElementById("debt");
+const shareInput = document.getElementById("share");
+const incomeInput = document.getElementById("income");
+const mydebtInput = document.getElementById("mydebt");
 
-          <div class="footer">
-            Næste: Vi tilføjer “salg vs. behold”, rådighedsbeløb og betalt PDF-rapport.
-          </div>
-        </div>
-      </section>
-    </div>
-  </div>
+calc();
+</script>
 
-  <script>
-    function toNumber(v) {
-      if (typeof v !== "string") return Number(v) || 0;
-      const cleaned = v.replace(/\./g, "").replace(/\s/g, "").replace(/,/g, "");
-      const n = Number(cleaned);
-      return Number.isFinite(n) ? n : 0;
-    }
-
-    function dkk(n) {
-      const rounded = Math.round(n);
-      return new Intl.NumberFormat("da-DK").format(rounded) + " kr.";
-    }
-
-    function calc() {
-      const homeValue = toNumber(document.getElementById("homeValue").value);
-      const mortgage = toNumber(document.getElementById("mortgage").value);
-      const share = Number(document.getElementById("share").value) || 0.5;
-      const myIncomeM = toNumber(document.getElementById("myIncome").value);
-      const theirIncomeM = toNumber(document.getElementById("theirIncome").value);
-      const myDebt = toNumber(document.getElementById("myDebt").value);
-      const theirDebt = toNumber(document.getElementById("theirDebt").value);
-
-      const equity = Math.max(0, homeValue - mortgage);
-      const myEquity = equity * share;
-      const theirEquity = equity * (1 - share);
-
-      // “Overtagelse”: du overtager hele restgælden og betaler partner deres friværdiandel.
-      const payoutToOther = theirEquity;
-      const newTotalDebt = mortgage + myDebt + payoutToOther;
-
-      // Simpel “4x årsindkomst”-test.
-      const myIncomeY = myIncomeM * 12;
-      const maxDebt = myIncomeY * 4;
-
-      // Justering: hvis partner har høj indkomst og du ikke ønsker at blive boende, gør vi ikke noget; men output er stadig relevant.
-      let verdict = "Måske";
-      let cls = "maybe";
-      let expl = "";
-
-      const ratio = maxDebt > 0 ? newTotalDebt / maxDebt : 999;
-
-      if (newTotalDebt <= maxDebt * 0.90) {
-        verdict = "Sandsynligvis ja";
-        cls = "ok";
-      } else if (newTotalDebt <= maxDebt * 1.05) {
-        verdict = "Måske";
-        cls = "maybe";
-      } else {
-        verdict = "Sandsynligvis nej";
-        cls = "no";
-      }
-
-      expl = `Efter overtagelse: ca. ${dkk(newTotalDebt)} i samlet gæld (inkl. øvrig gæld og betaling til partner). ` +
-             `Simpel grænse (4× årsindkomst): ca. ${dkk(maxDebt)}.`;
-
-      document.getElementById("equity").textContent = dkk(equity);
-      document.getElementById("mySale").textContent = dkk(myEquity);
-      document.getElementById("payOther").textContent = dkk(payoutToOther);
-
-      const pill = document.getElementById("canStayPill");
-      pill.textContent = verdict;
-      pill.className = "pill " + cls;
-
-      document.getElementById("canStayTxt").textContent = expl;
-    }
-
-    function reset() {
-      document.getElementById("homeValue").value = "3500000";
-      document.getElementById("mortgage").value = "2100000";
-      document.getElementById("share").value = "0.50";
-      document.getElementById("wantStay").value = "yes";
-      document.getElementById("myIncome").value = "45000";
-      document.getElementById("theirIncome").value = "32000";
-      document.getElementById("myDebt").value = "150000";
-      document.getElementById("theirDebt").value = "50000";
-      calc();
-    }
-
-    document.getElementById("calcBtn").addEventListener("click", calc);
-    document.getElementById("resetBtn").addEventListener("click", reset);
-
-    // Auto-run
-    calc();
-  </script>
 </body>
 </html>
