@@ -1,104 +1,128 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Brudøkonomi</title>
-
-<style>
-body{font-family:system-ui;background:#f6f7f8;margin:0}
-.wrap{max-width:700px;margin:auto;padding:40px 20px}
-.card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
-h1{margin-top:0}
-label{display:block;margin-top:14px;font-weight:600}
-input{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-top:6px}
-button{margin-top:20px;padding:14px;border-radius:10px;border:0;background:#111;color:#fff;font-size:16px;width:100%}
-.kpi{margin-top:10px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brudøkonomi</title>
+  <style>
+    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f6f7f8;margin:0}
+    .wrap{max-width:760px;margin:auto;padding:40px 20px}
+    .card{background:#fff;border-radius:14px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+    h1{margin:0 0 16px}
+    label{display:block;margin-top:14px;font-weight:600}
+    input{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-top:6px;font-size:16px}
+    button{margin-top:20px;padding:14px;border-radius:10px;border:0;background:#111;color:#fff;font-size:16px;width:100%;cursor:pointer}
+    .box{margin-top:18px;background:#fafafa;border:1px solid #eee;border-radius:12px;padding:14px}
+    .kpi{margin:6px 0}
+    .muted{color:#666}
+  </style>
 </head>
 
 <body>
-<div class="wrap">
-<div class="card">
-<h1>Brudøkonomi</h1>
+  <div class="wrap">
+    <div class="card">
+      <h1>Brudøkonomi</h1>
 
-<label>Boligens værdi</label>
-<input id="home" type="number">
+      <label for="home">Boligens værdi</label>
+      <input id="home" type="number" inputmode="numeric" placeholder="fx 3.200.000">
 
-<label>Restgæld</label>
-<input id="mortgage" type="number">
+      <label for="mortgage">Restgæld</label>
+      <input id="mortgage" type="number" inputmode="numeric" placeholder="fx 2.100.000">
 
-<label>Din ejerandel (%)</label>
-<input id="share" type="number">
+      <label for="share">Din ejerandel (%)</label>
+      <input id="share" type="number" inputmode="numeric" placeholder="fx 50">
 
-<label>Din månedlige indkomst</label>
-<input id="income" type="number">
+      <label for="income">Din månedlige indkomst</label>
+      <input id="income" type="number" inputmode="numeric" placeholder="fx 42.000">
 
-<label>Din øvrige gæld</label>
-<input id="debt" type="number">
+      <label for="debt">Din øvrige gæld</label>
+      <input id="debt" type="number" inputmode="numeric" placeholder="fx 60.000">
 
-<button id="calc">Beregn</button>
+      <button id="calc" type="button">Beregn</button>
 
-<div id="preview"></div>
+      <div id="preview" class="box" style="display:none"></div>
 
-<button id="buy" style="display:none">Få fuld rapport (49 kr)</button>
-</div>
-</div>
+      <button id="buy" type="button" style="display:none">Få fuld rapport (49 kr)</button>
+
+      <p class="muted" style="margin:14px 0 0">
+        Tip: “Få fuld rapport” dukker op efter beregningen.
+      </p>
+    </div>
+  </div>
 
 <script>
-function fmt(n){
- return new Intl.NumberFormat("da-DK",{style:"currency",currency:"DKK",maximumFractionDigits:0}).format(n)
-}
+(function(){
+  const homeEl = document.getElementById("home");
+  const mortgageEl = document.getElementById("mortgage");
+  const shareEl = document.getElementById("share");
+  const incomeEl = document.getElementById("income");
+  const debtEl = document.getElementById("debt");
+  const calcBtn = document.getElementById("calc");
+  const buyBtn = document.getElementById("buy");
+  const previewEl = document.getElementById("preview");
 
-let report = null;
+  function fmt(n){
+    return new Intl.NumberFormat("da-DK", {
+      style:"currency",
+      currency:"DKK",
+      maximumFractionDigits:0
+    }).format(n);
+  }
 
-document.getElementById("calc").onclick = () => {
- const home = Number(homeInput.value);
- const mortgage = Number(mortgageInput.value);
- const share = Number(shareInput.value)/100;
- const income = Number(incomeInput.value);
- const debt = Number(debtInput.value);
+  calcBtn.addEventListener("click", () => {
+    const home = Number(homeEl.value || 0);
+    const mortgage = Number(mortgageEl.value || 0);
+    const sharePct = Number(shareEl.value || 0);
+    const share = sharePct / 100;
+    const income = Number(incomeEl.value || 0);
+    const debt = Number(debtEl.value || 0);
 
- const equity = home - mortgage;
- const yourEquity = equity * share;
- const payout = equity * (1-share);
- const totalDebt = mortgage + payout + debt;
+    const equity = home - mortgage;
+    const yourEquity = equity * share;
+    const payout = equity * (1 - share);
+    const totalDebt = mortgage + payout + debt;
 
- report = {
-   ts: new Date().toISOString(),
-   homeValue: home,
-   mortgage: mortgage,
-   sharePct: share*100,
-   incomeMonthly: income,
-   otherDebt: debt,
-   equity: equity,
-   saleProceeds: yourEquity,
-   payoutToPartner: payout,
-   totalDebtAfterTakeover: totalDebt
- };
+    const report = {
+      ts: new Date().toISOString(),
+      homeValue: home,
+      mortgage: mortgage,
+      sharePct: sharePct,
+      incomeMonthly: income,
+      otherDebt: debt,
+      equity: equity,
+      saleProceeds: yourEquity,
+      payoutToPartner: payout,
+      totalDebtAfterTakeover: totalDebt
+    };
 
- localStorage.setItem("brudoekonomi:last_report", JSON.stringify(report));
+    localStorage.setItem("brudoekonomi:last_report", JSON.stringify(report));
 
- preview.innerHTML = `
- <p class="kpi">Din friværdi: <b>${fmt(yourEquity)}</b></p>
- <p class="kpi">Udbetaling til partner: <b>${fmt(payout)}</b></p>
- <p class="kpi">Gæld efter overtagelse: <b>${fmt(totalDebt)}</b></p>
- `;
+    previewEl.style.display = "block";
+    previewEl.innerHTML = `
+      <div class="kpi">Din friværdi (andel): <b>${fmt(yourEquity)}</b></div>
+      <div class="kpi">Udbetaling til partner: <b>${fmt(payout)}</b></div>
+      <div class="kpi">Gæld efter overtagelse: <b>${fmt(totalDebt)}</b></div>
+    `;
 
- buy.style.display = "block";
-};
+    buyBtn.style.display = "block";
+  });
 
-const homeInput = document.getElementById("home");
-const mortgageInput = document.getElementById("mortgage");
-const shareInput = document.getElementById("share");
-const incomeInput = document.getElementById("income");
-const debtInput = document.getElementById("debt");
+  buyBtn.addEventListener("click", async () => {
+    buyBtn.disabled = true;
+    buyBtn.textContent = "Åbner betaling…";
 
-document.getElementById("buy").onclick = async () => {
- const res = await fetch("/api/create-checkout");
- const data = await res.json();
- window.location = data.url;
-};
+    try{
+      const res = await fetch("/api/create-checkout");
+      const data = await res.json();
+      if(!data || !data.url) throw new Error("Mangler checkout-url fra serveren");
+      window.location.href = data.url;
+    } catch(e){
+      alert("Kunne ikke starte betaling: " + e.message);
+      buyBtn.disabled = false;
+      buyBtn.textContent = "Få fuld rapport (49 kr)";
+    }
+  });
+})();
 </script>
 </body>
 </html>
