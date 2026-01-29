@@ -193,6 +193,21 @@ const incomeInput = document.getElementById("income");
 const mydebtInput = document.getElementById("mydebt");
 
 calc();
+  const STRIPE_LINK = "https://buy.stripe.com/test_8x200beGV7Zv4PFaPJfQI00";
+
+function goToCheckout(){
+  const payload = {
+    homeValue: Number(document.getElementById("home").value || 0),
+    mortgage: Number(document.getElementById("debt").value || 0),
+    share: Number(document.getElementById("share").value || 0.5),
+    myIncome: Number(document.getElementById("income").value || 0),
+    myDebt: Number(document.getElementById("mydebt").value || 0)
+  };
+
+  localStorage.setItem("bro_inputs", JSON.stringify(payload));
+  window.location.href = STRIPE_LINK;
+}
+
 </script>
 
 </body>
