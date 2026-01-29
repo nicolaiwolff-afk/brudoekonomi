@@ -63,71 +63,32 @@
   </div>
 
 <script>
-  function dkk(n){
-    const rounded = Math.round(Number(n || 0));
-    return new Intl.NumberFormat("da-DK").format(rounded) + " kr.";
-  }
-  function getQS(name){
-    const u = new URL(window.location.href);
-    return u.searchParams.get(name);
-  }
-  function loadInputs(){
-    try{
-      return JSON.parse(localStorage.getItem("bro_inputs") || "{}");
-    }catch(e){
-      return {};
-    }
-  }
-  function fillReport(data){
-    const home = Number(data.homeValue || 0);
-    const mort = Number(data.mortgage || 0);
-    const share = Number(data.share || 0.5);
-    const inc = Number(data.myIncome || 0);
-    const myDebt = Number(data.myDebt || 0);
+  const params = new URLSearchParams(window.location.search);
+  const sessionId = params.get("session_id");
 
-    const equity = Math.max(0, home - mort);
-    const myEquity = equity * share;
-    const payout = equity * (1 - share);
-    const total = mort + payout + myDebt;
+  // Debug: vis præcis hvad vi har i URL'en
+  const debug = document.createElement("pre");
+  debug.style.whiteSpace = "pre-wrap";
+  debug.textContent =
+    "DEBUG\n" +
+    "location.href = " + window.location.href + "\n" +
+    "session_id = " + sessionId + "\n";
+  document.body.appendChild(debug);
 
-    document.getElementById("ts").textContent = new Date().toLocaleString("da-DK");
-    document.getElementById("r_home").textContent = dkk(home);
-    document.getElementById("r_mort").textContent = dkk(mort);
-    document.getElementById("r_share").textContent = Math.round(share*100) + " %";
-    document.getElementById("r_inc").textContent = dkk(inc);
-    document.getElementById("r_debt").textContent = dkk(myDebt);
+  async function run() {
+    if (!sessionId) return;
 
-    document.getElementById("r_equity").textContent = dkk(equity);
-    document.getElementById("r_sale").textContent = dkk(myEquity);
-    document.getElementById("r_payout").textContent = dkk(payout);
-    document.getElementById("r_total").textContent = dkk(total);
+    const res = await fetch(`/api/session-status?session_id=${encodeURIComponent(sessionId)}`);
+    const data = await res.json();
 
-    document.getElementById("pdfBtn").addEventListener("click", () => window.print());
+    const out = document.createElement("pre");
+    out.style.whiteSpace = "pre-wrap";
+    out.textContent = "API response:\n" + JSON.stringify(data, null, 2);
+    document.body.appendChild(out);
   }
 
-  async function main(){
-    const sid = getQS("session_id");
-    const status = document.getElementById("status");
-
-    if(!sid){
-      status.textContent = "Mangler session_id i URL.";
-      document.getElementById("notpaid").classList.remove("hidden");
-      return;
-    }
-
-    const r = await fetch(`/api/session-status?session_id=${encodeURIComponent(sid)}`);
-    const j = await r.json();
-
-    if(j.ok && j.paid){
-      status.textContent = "Betaling bekræftet.";
-      document.getElementById("paid").classList.remove("hidden");
-      fillReport(loadInputs());
-    } else {
-      status.textContent = "Betaling ikke bekræftet endnu.";
-      document.getElementById("notpaid").classList.remove("hidden");
-    }
-  }
-  main();
+  run();
 </script>
+
 </body>
 </html>
