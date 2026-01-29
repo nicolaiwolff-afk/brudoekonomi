@@ -27,7 +27,41 @@
       color: var(--text);
     }
 
-    .wrap{max-width:1080px;margin:0 auto;padding:44px 18px}
+    .wrap{max-width:1080px;margin:0 auto;padding:28px 18px 44px}
+
+    /* NAV */
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    .brand{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;background:#111;opacity:.85
+    }
+    .brand a{
+      color:#111;
+      text-decoration:none;
+      font-weight:750;
+      letter-spacing:.2px;
+    }
+    .links{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+    .links a{
+      color:var(--muted);
+      text-decoration:none;
+      font-weight:600;
+    }
+    .links a:hover{color:#111}
 
     .top{
       display:grid;
@@ -46,13 +80,16 @@
       box-shadow: var(--shadow2);
       padding:26px;
     }
-    .brand{
-      display:flex;gap:10px;align-items:center;margin-bottom:10px
+
+    /* Hero "kicker" (erstatter tidligere brand-linje for at undgå dobbelt branding) */
+    .kicker{
+      color:var(--muted);
+      font-weight:650;
+      letter-spacing:.2px;
+      margin:0 0 10px;
+      font-size:.95rem;
     }
-    .dot{
-      width:10px;height:10px;border-radius:999px;background:#111;opacity:.85
-    }
-    .brand span{font-weight:700;letter-spacing:.2px}
+
     h1{margin:0 0 10px;font-size:2.15rem;line-height:1.15}
     .lead{margin:0 0 16px;color:var(--muted);line-height:1.6;font-size:1.02rem}
     .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
@@ -162,9 +199,23 @@
 <body>
   <div class="wrap">
 
+    <!-- NAVIGATION -->
+    <div class="nav">
+      <div class="brand">
+        <div class="dot"></div>
+        <a href="/">Brudøkonomi</a>
+      </div>
+      <div class="links">
+        <a href="/om.html">Om</a>
+        <a href="/datagrundlag.html">Datagrundlag</a>
+        <a href="/privatliv.html">Privatliv</a>
+        <a href="/">Beregner</a>
+      </div>
+    </div>
+
     <div class="top">
       <div class="hero">
-        <div class="brand"><div class="dot"></div><span>Brudøkonomi</span></div>
+        <div class="kicker">Et hurtigt, roligt overblik – før du beslutter dig</div>
         <h1>Få ro i maven: et klart overblik over bolig og økonomi før næste skridt.</h1>
         <p class="lead">
           Indtast jeres nøgletal og få et hurtigt estimat. Hvis du vil gå videre, kan du købe en fuld rapport med scenarier og opsummering,
