@@ -3,101 +3,281 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Brudøkonomi</title>
-
+  <title>Brudøkonomi – overblik før du beslutter dig</title>
   <style>
-    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-           background: #f6f7f8; margin: 0; color: #111; }
-    .wrap { max-width: 900px; margin: 0 auto; padding: 38px 18px; }
-    .card { background: #fff; border: 1px solid #e7e7e7; border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.06); padding: 18px; }
-    h1 { margin: 0 0 10px; font-size: 1.8rem; }
-    label { display: block; margin-top: 14px; font-weight: 600; }
-    input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;
-            font-size: 1rem; margin-top: 6px; }
-    button { margin-top: 20px; padding: 14px; border-radius: 10px; border: 0;
-             background: #111; color: #fff; font-size: 1rem; width: 100%; cursor: pointer; }
-    .box { margin-top: 20px; background: #fafafa; border: 1px solid #eee;
-            border-radius: 12px; padding: 14px; }
-    .kpi { margin: 10px 0; }
-    .muted { color: #666; margin-top: 10px; }
+    :root{
+      --bg:#f6f7f8;
+      --card:#ffffff;
+      --text:#111;
+      --muted:#60646c;
+      --border:#e7e7e7;
+      --shadow:0 12px 34px rgba(0,0,0,.08);
+      --shadow2:0 8px 24px rgba(0,0,0,.06);
+      --radius:16px;
+      --btn:#111;
+      --btn2:#2b2b2b;
+      --chip:#f1f2f3;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .wrap{max-width:1080px;margin:0 auto;padding:44px 18px}
+
+    .top{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:22px;
+      align-items:stretch;
+    }
+    @media(max-width:960px){
+      .top{grid-template-columns:1fr}
+    }
+
+    .hero{
+      background:linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.65));
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+      padding:26px;
+    }
+    .brand{
+      display:flex;gap:10px;align-items:center;margin-bottom:10px
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;background:#111;opacity:.85
+    }
+    .brand span{font-weight:700;letter-spacing:.2px}
+    h1{margin:0 0 10px;font-size:2.15rem;line-height:1.15}
+    .lead{margin:0 0 16px;color:var(--muted);line-height:1.6;font-size:1.02rem}
+    .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    .chip{
+      background:var(--chip);
+      border:1px solid #e9eaec;
+      border-radius:999px;
+      padding:8px 10px;
+      font-size:.92rem;
+      color:#2b2f36;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:22px;
+    }
+
+    .card h2{margin:0 0 6px;font-size:1.2rem}
+    .card p{margin:0 0 16px;color:var(--muted);line-height:1.55}
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    @media(max-width:720px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    label{display:block;font-weight:650;margin:0 0 6px;font-size:.95rem}
+    input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid #cfd2d7;
+      font-size:1rem;
+      outline:none;
+      background:#fff;
+    }
+    input:focus{border-color:#111; box-shadow:0 0 0 4px rgba(0,0,0,.08)}
+
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      border:0;
+      border-radius:12px;
+      padding:12px 14px;
+      font-size:1rem;
+      cursor:pointer;
+      text-decoration:none;
+      user-select:none;
+    }
+    .btn.primary{background:var(--btn);color:#fff;min-width:220px}
+    .btn.secondary{background:var(--btn2);color:#fff}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+
+    .fine{margin-top:10px;color:var(--muted);font-size:.92rem}
+
+    .preview{
+      margin-top:16px;
+      border-top:1px solid #eee;
+      padding-top:14px;
+      display:none;
+    }
+    .kpi{
+      padding:10px 0;
+      border-bottom:1px solid #f0f0f0;
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      align-items:baseline;
+    }
+    .kpi b{font-weight:650}
+    .muted{color:var(--muted)}
+
+    .below{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:12px;
+    }
+    @media(max-width:900px){ .below{grid-template-columns:1fr} }
+    .mini{
+      background:rgba(255,255,255,.7);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding:16px;
+      box-shadow: var(--shadow2);
+    }
+    .mini h3{margin:0 0 6px;font-size:1.05rem}
+    .mini p{margin:0;color:var(--muted);line-height:1.55}
+    .footer{
+      margin-top:18px;
+      color:var(--muted);
+      font-size:.92rem;
+    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <div class="card">
-      <h1>Brudøkonomi</h1>
-      <p>Indtast jeres nøgletal herunder og få et hurtigt overblik over boligøkonomien før du køber fuld rapport.</p>
 
-      <label for="home">Boligens værdi</label>
-      <input id="home" type="number" placeholder="fx 3.200.000">
+    <div class="top">
+      <div class="hero">
+        <div class="brand"><div class="dot"></div><span>Brudøkonomi</span></div>
+        <h1>Få ro i maven: et klart overblik over bolig og økonomi før næste skridt.</h1>
+        <p class="lead">
+          Indtast jeres nøgletal og få et hurtigt estimat. Hvis du vil gå videre, kan du købe en fuld rapport med scenarier og opsummering,
+          som er nem at tage med i dialogen med bank, rådgiver eller din egen mavefornemmelse.
+        </p>
 
-      <label for="mortgage">Restgæld</label>
-      <input id="mortgage" type="number" placeholder="fx 2.100.000">
-
-      <label for="share">Din ejerandel (%)</label>
-      <input id="share" type="number" placeholder="fx 50">
-
-      <label for="income">Din månedlige indkomst</label>
-      <input id="income" type="number" placeholder="fx 42.000">
-
-      <label for="debt">Din øvrige gæld</label>
-      <input id="debt" type="number" placeholder="fx 60.000">
-
-      <button id="calcBtn" type="button">Beregn</button>
-
-      <div id="preview" class="box" style="display:none;">
-        <div class="kpi"><b>Din friværdi (andel):</b> <span id="p_equity">—</span></div>
-        <div class="kpi"><b>Udbetaling til partner:</b> <span id="p_payout">—</span></div>
-        <div class="kpi"><b>Gæld efter overtagelse:</b> <span id="p_total">—</span></div>
+        <div class="chips">
+          <div class="chip">2 min. beregning</div>
+          <div class="chip">Fuld rapport efter betaling</div>
+          <div class="chip">Gem som PDF</div>
+          <div class="chip">Ingen login</div>
+        </div>
       </div>
 
-      <button id="buyBtn" type="button" style="display:none;">Få fuld rapport</button>
+      <div class="card">
+        <h2>Beregner</h2>
+        <p>Udfyld felterne. Klik “Beregn”. Derefter kan du købe den fulde rapport.</p>
 
-      <p class="muted">“Få fuld rapport” dukker op når beregningen er lavet.</p>
+        <div class="grid">
+          <div>
+            <label for="home">Boligens værdi</label>
+            <input id="home" type="number" inputmode="numeric" placeholder="fx 3.200.000">
+          </div>
+          <div>
+            <label for="mortgage">Restgæld</label>
+            <input id="mortgage" type="number" inputmode="numeric" placeholder="fx 2.100.000">
+          </div>
+          <div>
+            <label for="share">Din ejerandel (%)</label>
+            <input id="share" type="number" inputmode="numeric" placeholder="fx 50">
+          </div>
+          <div>
+            <label for="income">Din månedlige indkomst</label>
+            <input id="income" type="number" inputmode="numeric" placeholder="fx 42.000">
+          </div>
+          <div>
+            <label for="debt">Din øvrige gæld</label>
+            <input id="debt" type="number" inputmode="numeric" placeholder="fx 60.000">
+          </div>
+        </div>
+
+        <div class="row">
+          <button class="btn primary" id="calcBtn" type="button">Beregn</button>
+          <button class="btn secondary" id="buyBtn" type="button" style="display:none;">Få fuld rapport</button>
+        </div>
+
+        <div class="fine">Tip: “Få fuld rapport” dukker op efter beregningen.</div>
+
+        <div class="preview" id="preview">
+          <div class="kpi"><span class="muted">Din friværdi (andel)</span> <b id="p_equity">—</b></div>
+          <div class="kpi"><span class="muted">Udbetaling til partner</span> <b id="p_payout">—</b></div>
+          <div class="kpi"><span class="muted">Gæld efter overtagelse</span> <b id="p_total">—</b></div>
+        </div>
+      </div>
     </div>
+
+    <div class="below">
+      <div class="mini">
+        <h3>Hvad får du i den fulde rapport?</h3>
+        <p>En samlet opsummering af dine tal samt et simpelt scenarie-overblik, så du kan vurdere, om overtagelse eller salg giver bedst mening.</p>
+      </div>
+      <div class="mini">
+        <h3>Hvad kræver det af dig?</h3>
+        <p>Kun de nøgletal, du typisk kan finde i e-Boks, netbank eller salgsopstilling: værdi, restgæld og jeres ejerandel.</p>
+      </div>
+      <div class="mini">
+        <h3>Gem som PDF</h3>
+        <p>Når betalingen er bekræftet, kan du gemme rapporten som PDF direkte fra din browser.</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      Bemærk: Beregningen er et vejledende overblik baseret på dine indtastninger og forsimplede antagelser.
+    </div>
+
   </div>
 
 <script>
 (function(){
-
-  // ✅ Dit Stripe betalingslink
   const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/test_8x200beGV7Zv4PFaPJfQI00";
 
-  const homeEl     = document.getElementById("home");
-  const mortgageEl= document.getElementById("mortgage");
-  const shareEl    = document.getElementById("share");
-  const incomeEl   = document.getElementById("income");
-  const debtEl     = document.getElementById("debt");
-  const calcBtn    = document.getElementById("calcBtn");
-  const buyBtn     = document.getElementById("buyBtn");
+  const elHome = document.getElementById("home");
+  const elMortgage = document.getElementById("mortgage");
+  const elShare = document.getElementById("share");
+  const elIncome = document.getElementById("income");
+  const elDebt = document.getElementById("debt");
 
-  const preview    = document.getElementById("preview");
-  const p_equity   = document.getElementById("p_equity");
-  const p_payout   = document.getElementById("p_payout");
-  const p_total    = document.getElementById("p_total");
+  const calcBtn = document.getElementById("calcBtn");
+  const buyBtn = document.getElementById("buyBtn");
+
+  const preview = document.getElementById("preview");
+  const p_equity = document.getElementById("p_equity");
+  const p_payout = document.getElementById("p_payout");
+  const p_total = document.getElementById("p_total");
 
   function dkk(n){
     const v = Number(n);
     if(!Number.isFinite(v)) return "—";
-    return new Intl.NumberFormat("da-DK", {
-      style: "currency", currency: "DKK", maximumFractionDigits: 0
-    }).format(v);
+    return new Intl.NumberFormat("da-DK", { maximumFractionDigits: 0 }).format(Math.round(v)) + " kr.";
   }
 
   function buildReport(){
-    const home = Number(homeEl.value || 0);
-    const mortgage = Number(mortgageEl.value || 0);
-    const sharePct = Number(shareEl.value || 0);
-    const share    = sharePct / 100;
-    const income   = Number(incomeEl.value || 0);
-    const debt     = Number(debtEl.value || 0);
+    const home = Number(elHome.value || 0);
+    const mortgage = Number(elMortgage.value || 0);
+    const sharePct = Number(elShare.value || 0);
+    const share = sharePct / 100;
+    const income = Number(elIncome.value || 0);
+    const debt = Number(elDebt.value || 0);
 
-    const equity  = home - mortgage;
-    const yourEquity = equity * share;
-    const payout     = equity * (1 - share);
-    const totalDebt  = mortgage + payout + debt;
+    const equity = home - mortgage;
+    const myEquity = equity * share;
+    const payout = equity * (1 - share);
+    const totalDebt = mortgage + payout + debt;
 
     const report = {
       ts: new Date().toISOString(),
@@ -107,7 +287,7 @@
       incomeMonthly: income,
       otherDebt: debt,
       equity: equity,
-      saleProceeds: yourEquity,
+      saleProceeds: myEquity,
       payoutToPartner: payout,
       totalDebtAfterTakeover: totalDebt
     };
@@ -122,23 +302,17 @@
     preview.style.display = "block";
     p_equity.textContent = dkk(r.saleProceeds);
     p_payout.textContent = dkk(r.payoutToPartner);
-    p_total.textContent  = dkk(r.totalDebtAfterTakeover);
+    p_total.textContent = dkk(r.totalDebtAfterTakeover);
 
-    buyBtn.style.display = "block";
+    buyBtn.style.display = "inline-flex";
   });
 
   buyBtn.addEventListener("click", () => {
-    // Gem rapporten igen
     buildReport();
-
-    if(!STRIPE_PAYMENT_LINK || STRIPE_PAYMENT_LINK.includes("stripe.com/test_")){
-      window.location.href = STRIPE_PAYMENT_LINK;
-    } else {
-      alert("Der er et problem med Stripe-linket. Tjek index.html.");
-    }
+    window.location.href = STRIPE_PAYMENT_LINK;
   });
-
 })();
 </script>
+
 </body>
 </html>
