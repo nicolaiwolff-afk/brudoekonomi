@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Privatliv – Brudøkonomi</title>
+  <style>
+    :root{--bg:#f6f7f8;--card:#fff;--text:#111;--muted:#60646c;--border:#e7e7e7;--shadow:0 12px 34px rgba(0,0,0,.08);--shadow2:0 8px 24px rgba(0,0,0,.06);--radius:16px}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:1080px;margin:0 auto;padding:26px 18px 44px}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+    .brand{display:flex;gap:10px;align-items:center}
+    .dot{width:10px;height:10px;border-radius:999px;background:#111;opacity:.85}
+    .brand a{color:#111;text-decoration:none;font-weight:750;letter-spacing:.2px}
+    .links{display:flex;gap:12px;flex-wrap:wrap}
+    .links a{color:var(--muted);text-decoration:none;font-weight:600}
+    .links a:hover{color:#111}
+    .hero{background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.7));border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow2);padding:22px}
+    h1{margin:0 0 10px;font-size:2rem;line-height:1.15}
+    p{margin:0 0 12px;color:#444;line-height:1.65}
+    .muted{color:var(--muted)}
+    .card{margin-top:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+    .card h2{margin:0 0 10px;font-size:1.15rem}
+    .note{background:#fafafa;border:1px solid #eee;border-radius:12px;padding:12px;margin-top:10px;color:#333}
+    .footer{margin-top:18px;color:var(--muted);font-size:.92rem}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="nav">
+      <div class="brand">
+        <div class="dot"></div>
+        <a href="/">Brudøkonomi</a>
+      </div>
+      <div class="links">
+        <a href="/om.html">Om</a>
+        <a href="/datagrundlag.html">Datagrundlag</a>
+        <a href="/privatliv.html">Privatliv</a>
+        <a href="/">Beregner</a>
+      </div>
+    </div>
+
+    <div class="hero">
+      <h1>Privatliv og data</h1>
+      <p class="muted">
+        Brudøkonomi er designet til at være enkelt og privat: dine indtastninger gemmes i browseren, så rapporten kan vises efter betaling.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>Hvad gemmes – og hvor?</h2>
+      <p>
+        Når du bruger beregneren, gemmes dine indtastninger og beregninger lokalt i din browser (localStorage), så de kan vises igen på rapport-siden.
+        Det betyder i praksis, at data typisk bliver på din egen enhed.
+      </p>
+
+      <div class="note">
+        Hvis du bruger en anden enhed eller browser til at betale og se rapporten, kan rapportdata mangle – fordi data gemmes lokalt på enheden.
+      </div>
+
+      <h2>Hvad sendes til serveren?</h2>
+      <p>
+        Når du lander på success-siden efter betaling, kalder siden et lille endpoint, der kontrollerer, om betalingen er gennemført hos Stripe.
+        Det kald indeholder kun et betalings-id (session_id). Der sendes ikke dine indtastede tal med i dette kald.
+      </p>
+
+      <h2>Stripe</h2>
+      <p>
+        Betaling håndteres af Stripe. Stripe behandler betalingsoplysninger. Brudøkonomi modtager ikke dine kortoplysninger.
+      </p>
+
+      <p class="muted">
+        Hvis vi senere tilføjer e-mail-levering eller lagring af rapporter, vil denne side blive opdateret, så databehandlingen er gennemsigtig.
+      </p>
+    </div>
+
+    <div class="footer">
+      <a href="/om.html" style="color:inherit;">Om værktøjet</a> ·
+      <a href="/datagrundlag.html" style="color:inherit;">Datagrundlag</a>
+    </div>
+
+  </div>
+</body>
+</html>
