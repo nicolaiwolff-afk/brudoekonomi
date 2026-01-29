@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Brudøkonomi – Rapport</title>
+
   <style>
     body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f6f7f8;margin:0;color:#111}
     .wrap{max-width:900px;margin:0 auto;padding:38px 18px}
@@ -16,6 +17,7 @@
     .report{margin-top:14px;border-top:1px solid #eee;padding-top:14px}
     .kpi{padding:10px 0;border-bottom:1px solid #f0f0f0}
     .kpi b{display:inline-block;min-width:240px}
+
     @media print{
       .no-print{display:none}
       body{background:#fff}
@@ -24,70 +26,84 @@
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>Din rapport</h1>
-      <p id="status" class="muted">Kontrollerer betaling …</p>
 
-      <div id="paid" class="hidden">
-        <p>Betaling bekræftet. Du kan nu downloade rapporten som PDF.</p>
-        <button class="btn no-print" id="pdfBtn">Download PDF</button>
+<div class="wrap">
+  <div class="card">
+    <h1>Din rapport</h1>
+    <p id="status" class="muted">Kontrollerer betaling …</p>
 
-        <div class="report" id="report">
-          <h2 style="margin:14px 0 8px;">Brudøkonomi – Fuld rapport</h2>
-          <p class="muted">Genereret: <span id="ts"></span></p>
+    <div id="paid" class="hidden">
+      <p>Betaling bekræftet. Du kan nu se og gemme din rapport.</p>
+      <button class="btn no-print" onclick="window.print()">Download PDF</button>
 
-          <div class="kpi"><b>Boligens værdi</b> <span id="r_home">—</span></div>
-          <div class="kpi"><b>Restgæld</b> <span id="r_mort">—</span></div>
-          <div class="kpi"><b>Din ejerandel</b> <span id="r_share">—</span></div>
-          <div class="kpi"><b>Din månedlige indkomst</b> <span id="r_inc">—</span></div>
-          <div class="kpi"><b>Din øvrige gæld</b> <span id="r_debt">—</span></div>
+      <div class="report" id="report">
+        <h2 style="margin:14px 0 8px;">Brudøkonomi – Fuld rapport</h2>
+        <p class="muted">Genereret: <span id="ts"></span></p>
 
-          <div class="kpi"><b>Samlet friværdi</b> <span id="r_equity">—</span></div>
-          <div class="kpi"><b>Dit estimerede salgsudbytte</b> <span id="r_sale">—</span></div>
-          <div class="kpi"><b>Beløb til partner ved overtagelse</b> <span id="r_payout">—</span></div>
-          <div class="kpi"><b>Samlet gæld efter overtagelse</b> <span id="r_total">—</span></div>
+        <div class="kpi"><b>Boligens værdi</b> <span id="r_home">—</span></div>
+        <div class="kpi"><b>Restgæld</b> <span id="r_mort">—</span></div>
+        <div class="kpi"><b>Din ejerandel</b> <span id="r_share">—</span></div>
+        <div class="kpi"><b>Din månedlige indkomst</b> <span id="r_inc">—</span></div>
+        <div class="kpi"><b>Din øvrige gæld</b> <span id="r_debt">—</span></div>
 
-          <p class="muted" style="margin-top:12px;">
-            Bemærk: Rapporten er et økonomisk overblik baseret på dine indtastninger og en forsimplet kredit-test. Brug den som beslutningsstøtte.
-          </p>
-        </div>
-      </div>
+        <div class="kpi"><b>Samlet friværdi</b> <span id="r_equity">—</span></div>
+        <div class="kpi"><b>Dit estimerede salgsudbytte</b> <span id="r_sale">—</span></div>
+        <div class="kpi"><b>Beløb til partner ved overtagelse</b> <span id="r_payout">—</span></div>
+        <div class="kpi"><b>Samlet gæld efter overtagelse</b> <span id="r_total">—</span></div>
 
-      <div id="notpaid" class="hidden">
-        <p>Jeg kan ikke bekræfte en gennemført betaling på dette link endnu.</p>
-        <p class="muted">Hvis du netop har betalt, så vent 1–2 minutter og genindlæs siden.</p>
-        <p><a class="btn" href="/">Tilbage til beregner</a></p>
+        <p class="muted" style="margin-top:12px;">
+          Rapporten er baseret på dine indtastninger og forsimplede beregninger og er udelukkende vejledende.
+        </p>
       </div>
     </div>
+
+    <div id="notpaid" class="hidden">
+      <p>Jeg kan ikke bekræfte din betaling endnu.</p>
+      <p class="muted">Hvis du netop har betalt, vent 30 sekunder og genindlæs siden.</p>
+      <p><a class="btn" href="/">Tilbage til beregner</a></p>
+    </div>
   </div>
+</div>
 
 <script>
   const params = new URLSearchParams(window.location.search);
   const sessionId = params.get("session_id");
 
-  // Debug: vis præcis hvad vi har i URL'en
-  const debug = document.createElement("pre");
-  debug.style.whiteSpace = "pre-wrap";
-  debug.textContent =
-    "DEBUG\n" +
-    "location.href = " + window.location.href + "\n" +
-    "session_id = " + sessionId + "\n";
-  document.body.appendChild(debug);
+  const statusEl = document.getElementById("status");
+  const paidEl = document.getElementById("paid");
+  const notPaidEl = document.getElementById("notpaid");
 
-  async function run() {
-    if (!sessionId) return;
+  async function checkPayment() {
+    if (!sessionId) {
+      statusEl.textContent = "Manglende betalings-id.";
+      notPaidEl.classList.remove("hidden");
+      return;
+    }
 
-    const res = await fetch(`/api/session-status?session_id=${encodeURIComponent(sessionId)}`);
-    const data = await res.json();
+    try {
+      const res = await fetch(`/api/session-status?session_id=${encodeURIComponent(sessionId)}`);
+      const data = await res.json();
 
-    const out = document.createElement("pre");
-    out.style.whiteSpace = "pre-wrap";
-    out.textContent = "API response:\n" + JSON.stringify(data, null, 2);
-    document.body.appendChild(out);
+      if (data.ok && data.paid) {
+        statusEl.textContent = "Betaling bekræftet ✅";
+        paidEl.classList.remove("hidden");
+        notPaidEl.classList.add("hidden");
+
+        document.getElementById("ts").textContent =
+          new Date().toLocaleString("da-DK");
+
+      } else {
+        statusEl.textContent = "Betaling ikke fundet endnu.";
+        notPaidEl.classList.remove("hidden");
+      }
+
+    } catch (e) {
+      statusEl.textContent = "Teknisk fejl – prøv igen.";
+      notPaidEl.classList.remove("hidden");
+    }
   }
 
-  run();
+  checkPayment();
 </script>
 
 </body>
